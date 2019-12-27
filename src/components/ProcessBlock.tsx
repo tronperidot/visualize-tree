@@ -9,6 +9,7 @@ export const PROCESS_BLOCK_SIZE = {
 type Props = {
   position: SVGPosition;
   contents: {
+    type: 'question' | 'cinema';
     text: string;
   };
 };
@@ -25,6 +26,7 @@ const ProcessBlock: React.FC<Props> = ({ position: { x, y }, contents }) => {
   // TODO: single line text to multi line text.
   const rectX = x - PROCESS_BLOCK_SIZE.WIDTH / 2;
   const rectY = y - PROCESS_BLOCK_SIZE.HEIGHT / 2;
+  const fill = contents.type === 'question' ? 'mediumseagreen' : 'gainsboro';
   return (
     <g>
       <rect
@@ -32,10 +34,10 @@ const ProcessBlock: React.FC<Props> = ({ position: { x, y }, contents }) => {
         y={rectY}
         width={PROCESS_BLOCK_SIZE.WIDTH}
         height={PROCESS_BLOCK_SIZE.HEIGHT}
-        style={{ fill: 'mediumseagreen' }}
+        style={{ fill }}
       />
       <text
-        x={rectX + 16}
+        x={rectX + 5}
         y={rectY + 20}
         width={10}
         height={PROCESS_BLOCK_SIZE.HEIGHT}

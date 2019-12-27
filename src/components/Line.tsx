@@ -17,7 +17,7 @@ const Line: React.FC<Props> = ({ from, to }) => {
         strokeWidth={strokeWidth}
       />
       <text x={calcMiddle(from.x, to.x) + 30} y={calcMiddle(from.y, to.y)}>
-        {strokeWidth}
+        {/* {strokeWidth} */}
       </text>
     </g>
   );

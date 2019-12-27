@@ -1,4 +1,4 @@
-export const SVG_WIDTH = 1200;
+export const SVG_WIDTH = 3000;
 
 export interface SVGPosition {
   x: number,
