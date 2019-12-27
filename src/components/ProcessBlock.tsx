@@ -1,34 +1,47 @@
 import React from 'react';
+import { SVGPosition } from '../constants';
+
+export const PROCESS_BLOCK_SIZE = {
+  WIDTH: 100,
+  HEIGHT: 50
+};
 
 type Props = {
-  x: number;
-  y: number;
+  position: SVGPosition;
+  contents: {
+    text: string;
+  };
 };
 
 // NOTE: color codes
 // https://www.december.com/html/spec/colorsvg.html
 
-const ProcessBlock: React.FC<Props> = ({ x, y }) => {
-  const width = 100;
-  const height = 50;
+/**
+ * xとyが中心になるように広がる
+ *
+ * @param param0
+ */
+const ProcessBlock: React.FC<Props> = ({ position: { x, y }, contents }) => {
   // TODO: single line text to multi line text.
+  const rectX = x - PROCESS_BLOCK_SIZE.WIDTH / 2;
+  const rectY = y - PROCESS_BLOCK_SIZE.HEIGHT / 2;
   return (
     <g>
       <rect
-        x={x}
-        y={y}
-        width={width}
-        height={height}
+        x={rectX}
+        y={rectY}
+        width={PROCESS_BLOCK_SIZE.WIDTH}
+        height={PROCESS_BLOCK_SIZE.HEIGHT}
         style={{ fill: 'mediumseagreen' }}
       />
       <text
-        x={x + 16}
-        y={y + height / 2}
+        x={rectX + 16}
+        y={rectY + 20}
         width={10}
-        height={height}
-        font-size="10"
+        height={PROCESS_BLOCK_SIZE.HEIGHT}
+        fontSize="10"
       >
-        主人公になりたくないのになってしまう
+        {contents.text}
       </text>
     </g>
   );

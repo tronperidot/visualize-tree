@@ -14,9 +14,9 @@ const Line: React.FC<Props> = ({ from, to }) => {
         y1={from.y}
         x2={to.x}
         y2={to.y}
-        stroke-width={strokeWidth}
+        strokeWidth={strokeWidth}
       />
-      <text x={calcMiddle(from.x, to.x)} y={calcMiddle(from.y, to.y)}>
+      <text x={calcMiddle(from.x, to.x) + 30} y={calcMiddle(from.y, to.y)}>
         {strokeWidth}
       </text>
     </g>
