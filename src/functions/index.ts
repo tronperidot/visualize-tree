@@ -1,16 +1,18 @@
-import { Question, Questions, Answer } from "../mockData/Questions";
+import { Question, Answer } from "../mockData/Questions";
 import { SVG_WINDOW_WIDTH, SVGPosition, SLIDE_SIZE, PROCESS_BLOCK_SIZE, GAP_SIZE } from "../constants";
 import { Cinemas, Cinema } from "../mockData/Cinemas";
 
+type ProcessType = 'question' | 'cinema';
+
 export interface ProcessBlockQuery {
-  type: 'question' | 'cinema';
+  type: ProcessType;
   position: SVGPosition;
   question?: Question;
   cinema?: Cinema;
 }
 
 export interface LineQuery {
-  type: 'question' | 'cinema';
+  type: ProcessType;
   fromId: number,
   toId: number,
   fromPosition: SVGPosition,
@@ -41,7 +43,7 @@ export const buildQuestionsToBlock = (questions: Question[]) => {
         if (next) {
           const nextPosition = {
             x: position.x + slideX(idx),
-            y: position.y + slideY(),
+            y: position.y + slideY(next.type),
           }
           reduceProcessBlock(next, nextPosition, nextDeepCnt, result)
         }
@@ -97,9 +99,12 @@ const slideX = (index: number) => (
   (index === 0) ? -SLIDE_SIZE : SLIDE_SIZE
 )
 
-const slideY = () => (
-  (PROCESS_BLOCK_SIZE.HEIGHT + 50)
-)
+const slideY = (type: ProcessType) => {
+  const slide = (type === 'cinema') ?
+  (PROCESS_BLOCK_SIZE.HEIGHT + 50) :
+  ((PROCESS_BLOCK_SIZE.HEIGHT + 30) * 2) + 20;
+  return slide; 
+}
 
 const buildQuery = (question: Question, position: SVGPosition): ProcessBlockQuery => (
   {
@@ -125,7 +130,7 @@ const buildCinema = (cinema: Cinema, position: SVGPosition): ProcessBlockQuery =
   }
 )
 
-type Next = { type: 'question' | 'cinema', src: Question | Cinema};
+type Next = { type: ProcessType, src: Question | Cinema};
 const findNext = (answer: Answer, store: Question[]): Next => {
   const question = (answer.nextQuestionId) ? store.find((q) => q.id === answer.nextQuestionId) : null;
   if (question) {

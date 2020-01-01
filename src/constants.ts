@@ -6,7 +6,7 @@ export const PROCESS_BLOCK_SIZE = {
   HEIGHT: 50
 };
 
-export const GAP_SIZE = 30;
+export const GAP_SIZE = 50;
 
 // 箱と箱の隙間のサイズ
 export const SLIDE_SIZE = PROCESS_BLOCK_SIZE.WIDTH + GAP_SIZE;
