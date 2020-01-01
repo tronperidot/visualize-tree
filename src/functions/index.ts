@@ -1,6 +1,5 @@
 import { Question, Questions, Answer } from "../mockData/Questions";
-import { SVG_WIDTH, SVGPosition } from "../constants";
-import { PROCESS_BLOCK_SIZE } from "../components/ProcessBlock";
+import { SVG_WINDOW_WIDTH, SVGPosition, SLIDE_SIZE, PROCESS_BLOCK_SIZE, GAP_SIZE } from "../constants";
 import { Cinemas, Cinema } from "../mockData/Cinemas";
 
 export interface ProcessBlockQuery {
@@ -21,7 +20,7 @@ export interface LineQuery {
 // 設問からブロックを作るやつ
 export const buildQuestionsToBlock = (questions: Question[]) => {
   const first = {
-    x: SVG_WIDTH / 2,
+    x: SVG_WINDOW_WIDTH / 2,
     y: (PROCESS_BLOCK_SIZE.HEIGHT / 2) + 10,
   };
 
@@ -81,9 +80,11 @@ const positionFit = (source: ProcessBlockQuery[]): ProcessBlockQuery[] => {
   }, []);
   // HACK: 参照渡しなので無理くりかえちゃう
   // HACK: もう少し自然に見えるように位置をずらす
-  groupByY.forEach((group) => {
+  groupByY.filter((group) => group.blocks.length > 0).forEach((group) => {
+    // 最初にfirstの調整をする
+    group.blocks[0].x = leftXPosition(group.blocks.length);
     group.blocks.forEach((block, idx, array) => {
-      const slide = (idx !== 0) ? (SLIDE_SIZE * idx) + (SLIDE_SIZE / 2) : 0;
+      const slide = (idx !== 0) ? (SLIDE_SIZE * idx): 0;
       block.x = array[0].x + slide;
     });
   });
@@ -91,7 +92,6 @@ const positionFit = (source: ProcessBlockQuery[]): ProcessBlockQuery[] => {
   return source;
 }
 
-const SLIDE_SIZE = 120;
 // NOTE: 現在は2つにしか広がらないので
 const slideX = (index: number) => (
   (index === 0) ? -SLIDE_SIZE : SLIDE_SIZE
@@ -169,4 +169,12 @@ export const buildPathQuery = (source: ProcessBlockQuery[]): LineQuery[] => {
     return prev;
   }, []);
   return result;
+}
+
+// 選択肢の数から一番左の要素のx座標を求める
+const leftXPosition = (contentSize: number) => {
+  const contentFullSize = (contentSize * PROCESS_BLOCK_SIZE.WIDTH) + (GAP_SIZE * (contentSize -1));
+  const leftPosition = (SVG_WINDOW_WIDTH - contentFullSize) / 2;
+  // xは要素の中央にしているので
+  return leftPosition + (PROCESS_BLOCK_SIZE.WIDTH / 2);
 }

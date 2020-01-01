@@ -2,7 +2,7 @@ import React from 'react';
 import './App.css';
 import ProcessBlock from './components/ProcessBlock';
 import Line from './components/Line';
-import { SVG_WIDTH } from './constants';
+import { SVG_WINDOW_WIDTH } from './constants';
 import { buildQuestionsToBlock, buildPathQuery } from './functions';
 import { Questions } from './mockData/Questions';
 
@@ -12,7 +12,7 @@ const App: React.FC = () => {
   const lines = buildPathQuery(processes);
   return (
     <div className="App">
-      <svg width={SVG_WIDTH} height={1500} version="1.1" xmlns="http://www.w3.org/2000/svg">
+      <svg width={SVG_WINDOW_WIDTH} height={1500} version="1.1" xmlns="http://www.w3.org/2000/svg">
         {lines.map((line, key) => (
           <Line from={line.fromPosition} to={line.toPosition } key={key} />
         ))}

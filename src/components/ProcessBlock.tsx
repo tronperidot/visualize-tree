@@ -1,10 +1,5 @@
 import React from 'react';
-import { SVGPosition } from '../constants';
-
-export const PROCESS_BLOCK_SIZE = {
-  WIDTH: 100,
-  HEIGHT: 50
-};
+import { SVGPosition, PROCESS_BLOCK_SIZE } from '../constants';
 
 type Props = {
   position: SVGPosition;
@@ -23,10 +18,13 @@ type Props = {
  * @param param0
  */
 const ProcessBlock: React.FC<Props> = ({ position: { x, y }, contents }) => {
-  // TODO: single line text to multi line text.
   const rectX = x - PROCESS_BLOCK_SIZE.WIDTH / 2;
   const rectY = y - PROCESS_BLOCK_SIZE.HEIGHT / 2;
   const fill = contents.type === 'question' ? 'mediumseagreen' : 'gainsboro';
+  const multiLineText =
+    contents.type === 'question'
+      ? split(contents.text, 11)
+      : contents.text.split('<br />');
   return (
     <g>
       <rect
@@ -36,17 +34,28 @@ const ProcessBlock: React.FC<Props> = ({ position: { x, y }, contents }) => {
         height={PROCESS_BLOCK_SIZE.HEIGHT}
         style={{ fill }}
       />
-      <text
-        x={rectX + 5}
-        y={rectY + 20}
-        width={10}
-        height={PROCESS_BLOCK_SIZE.HEIGHT}
-        fontSize="10"
-      >
-        {contents.text}
-      </text>
+      {multiLineText.map((text, idx) => (
+        <text
+          key={idx}
+          x={rectX + 5}
+          y={rectY + 20 + 16 * idx}
+          width={10}
+          height={PROCESS_BLOCK_SIZE.HEIGHT}
+          fontSize="10"
+        >
+          {text}
+        </text>
+      ))}
     </g>
   );
 };
 
 export default ProcessBlock;
+
+const split = (text: string, size: number) => {
+  const ary = [];
+  for (let i = 0; i < text.length; i += size) {
+    ary.push(text.slice(i, i + size));
+  }
+  return ary;
+};
