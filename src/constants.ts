@@ -5,7 +5,7 @@ export const SVG_WINDOW = {
 };
 // 設問ブロックの領域
 export const PROCESS_BLOCK_SIZE = {
-  WIDTH: 130,
+  WIDTH: 180,
   HEIGHT: 50
 };
 

@@ -6,14 +6,20 @@ type Props = {
 };
 
 const Line: React.FC<Props> = ({ from, to }) => {
-  const strokeWidth = 6;
+  const strokeWidth = 3;
+  const margin = randRange(10, 90);
+  const points = [
+    `${from.x},${from.y}`,
+    `${from.x + margin},${from.y}`,
+    `${from.x + margin},${to.y}`,
+    `${to.x - 5},${to.y}`
+  ].join(' ');
   return (
     <g stroke="black">
-      <line
-        x1={from.x}
-        y1={from.y}
-        x2={to.x}
-        y2={to.y}
+      <polyline
+        fill="none"
+        points={points}
+        markerEnd="url(#arrow)"
         strokeWidth={strokeWidth}
       />
       <text x={calcMiddle(from.x, to.x) + 30} y={calcMiddle(from.y, to.y)}>
@@ -24,5 +30,7 @@ const Line: React.FC<Props> = ({ from, to }) => {
 };
 
 const calcMiddle = (from: number, to: number) => (from + to) / 2;
+const randRange = (min: number, max: number) =>
+  Math.floor(Math.random() * (max - min + 1) + min);
 
 export default Line;

@@ -1,12 +1,9 @@
 import React from 'react';
-import { SVGPosition, PROCESS_BLOCK_SIZE } from '../constants';
+import { PROCESS_BLOCK_SIZE } from '../constants';
+import { ProcessBlockQuery } from '../models/ProcessBlockQuery';
 
 type Props = {
-  position: SVGPosition;
-  contents: {
-    type: 'question' | 'cinema';
-    text: string;
-  };
+  query: ProcessBlockQuery;
 };
 
 // NOTE: color codes
@@ -17,14 +14,15 @@ type Props = {
  *
  * @param param0
  */
-const ProcessBlock: React.FC<Props> = ({ position: { x, y }, contents }) => {
+const ProcessBlock: React.FC<Props> = ({ query }) => {
+  const { x, y } = query.position;
   const rectX = x - PROCESS_BLOCK_SIZE.WIDTH / 2;
   const rectY = y - PROCESS_BLOCK_SIZE.HEIGHT / 2;
-  const fill = contents.type === 'question' ? 'mediumseagreen' : 'gainsboro';
-  const multiLineText =
-    contents.type === 'question'
-      ? split(contents.text, 11)
-      : contents.text.split('<br />');
+  const fill = query.type === 'question' ? 'mediumseagreen' : 'gainsboro';
+  const multiLineText = [query.getLabel()];
+  if (query.isQuestion) {
+    query.getAnswerList.forEach(v => multiLineText.push(v.label));
+  }
   return (
     <g>
       <rect
@@ -38,7 +36,7 @@ const ProcessBlock: React.FC<Props> = ({ position: { x, y }, contents }) => {
         <text
           key={idx}
           x={rectX + 5}
-          y={rectY + 20 + 16 * idx}
+          y={rectY + 15 + 16 * idx}
           width={10}
           height={PROCESS_BLOCK_SIZE.HEIGHT}
           fontSize="10"

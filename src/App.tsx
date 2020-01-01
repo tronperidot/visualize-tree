@@ -7,6 +7,7 @@ import { buildPathQuery } from './functions';
 import { Questions } from './mockData/Questions';
 import { Cinemas } from './mockData/Cinemas';
 import { buildBlockArray, buildArrayToQuery } from './functions/builder';
+import Defs from './components/defs';
 
 const App: React.FC = () => {
   const ary = buildBlockArray(Questions, Cinemas);
@@ -19,14 +20,11 @@ const App: React.FC = () => {
           <Line from={line.fromPosition} to={line.toPosition } key={key} />
         ))}
         {processes.map((value, idx) => {
-          const contents = {
-            type: value.type,
-            text: (value.question) ? value.question.label : value.cinema!.title
-          }
           return (
-            <ProcessBlock position={value.position} contents={contents} key={idx} />
+            <ProcessBlock query={value} key={idx} />
           )
         })}
+        <Defs />
       </svg>
     </div>
   );
