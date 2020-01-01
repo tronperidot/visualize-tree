@@ -2,17 +2,19 @@ import React from 'react';
 import './App.css';
 import ProcessBlock from './components/ProcessBlock';
 import Line from './components/Line';
-import { SVG_WINDOW_WIDTH } from './constants';
-import { buildQuestionsToBlock, buildPathQuery } from './functions';
+import { SVG_WINDOW } from './constants';
+import { buildPathQuery } from './functions';
 import { Questions } from './mockData/Questions';
+import { Cinemas } from './mockData/Cinemas';
+import { buildBlockArray, buildArrayToQuery } from './functions/builder';
 
 const App: React.FC = () => {
-  const processes = buildQuestionsToBlock(Questions);
-  // console.log(processes.sort((a, b) => a.question.id - b.question.id).map((q) => q.question));
+  const ary = buildBlockArray(Questions, Cinemas);
+  const processes = buildArrayToQuery(ary);
   const lines = buildPathQuery(processes);
   return (
     <div className="App">
-      <svg width={SVG_WINDOW_WIDTH} height={1500} version="1.1" xmlns="http://www.w3.org/2000/svg">
+      <svg width={SVG_WINDOW.WIDTH} height={SVG_WINDOW.HEIGHT} version="1.1" xmlns="http://www.w3.org/2000/svg">
         {lines.map((line, key) => (
           <Line from={line.fromPosition} to={line.toPosition } key={key} />
         ))}

@@ -1,9 +1,11 @@
 import { Question, Answer } from "../mockData/Questions";
-import { SVG_WINDOW_WIDTH, SVGPosition, SLIDE_SIZE, PROCESS_BLOCK_SIZE, GAP_SIZE } from "../constants";
+import { SVG_WINDOW, SVGPosition, SLIDE_SIZE, PROCESS_BLOCK_SIZE, GAP_SIZE } from "../constants";
 import { Cinemas, Cinema } from "../mockData/Cinemas";
+import { buildBlockArray } from "./builder";
 
-type ProcessType = 'question' | 'cinema';
+export type ProcessType = 'question' | 'cinema';
 
+// TODO 削除予定
 export interface ProcessBlockQuery {
   type: ProcessType;
   position: SVGPosition;
@@ -21,8 +23,9 @@ export interface LineQuery {
 
 // 設問からブロックを作るやつ
 export const buildQuestionsToBlock = (questions: Question[]) => {
+  console.log(buildBlockArray(questions, Cinemas));
   const first = {
-    x: SVG_WINDOW_WIDTH / 2,
+    x: SVG_WINDOW.WIDTH / 2,
     y: (PROCESS_BLOCK_SIZE.HEIGHT / 2) + 10,
   };
 
@@ -179,7 +182,7 @@ export const buildPathQuery = (source: ProcessBlockQuery[]): LineQuery[] => {
 // 選択肢の数から一番左の要素のx座標を求める
 const leftXPosition = (contentSize: number) => {
   const contentFullSize = (contentSize * PROCESS_BLOCK_SIZE.WIDTH) + (GAP_SIZE * (contentSize -1));
-  const leftPosition = (SVG_WINDOW_WIDTH - contentFullSize) / 2;
+  const leftPosition = (SVG_WINDOW.WIDTH - contentFullSize) / 2;
   // xは要素の中央にしているので
   return leftPosition + (PROCESS_BLOCK_SIZE.WIDTH / 2);
 }
