@@ -19,7 +19,7 @@ export const buildBlockArray = (questions: Question[], cinemas: Cinema[]): Next[
     // remove
     result.forEach((deep: Next[], cnt) => {
       const idx = deep.findIndex(findFn);
-      if (idx != -1 && cnt < deepCnt) {
+      if (idx !== -1 && cnt < deepCnt) {
         deep.slice(idx, 1);
       }
     });
