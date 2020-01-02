@@ -14,6 +14,17 @@ const Defs: React.FC = () => {
       >
         <polygon points="0,0 5,5 0,10 10,5" fill="black" />
       </marker>
+      <marker
+        id="arrow-selected"
+        markerUnits="strokeWidth"
+        markerWidth="3"
+        markerHeight="3"
+        viewBox="0 0 10 10"
+        refX="5"
+        refY="5"
+      >
+        <polygon points="0,0 5,5 0,10 10,5" fill="royalblue" />
+      </marker>
     </defs>
   );
 };

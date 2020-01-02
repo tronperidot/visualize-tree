@@ -39,16 +39,27 @@ const renderQuestion = (
   const oneHeight = PROCESS_BLOCK_SIZE.HEIGHT / 3;
   const blocks = multiLineText.map((text, idx) => {
     const isTitle = idx === 0;
+    const selected =
+      idx % 2 > 0
+        ? {
+            fill: 'royalblue',
+            textColor: 'snow'
+          }
+        : {
+            fill: 'whitesmoke',
+            textColor: 'black'
+          };
     return {
       text: isTitle ? text : `　　${text}`,
-      fill: isTitle ? 'ivory' : 'whitesmoke',
+      fill: isTitle ? 'ivory' : selected.fill,
       x: rectX,
-      y: rectY + oneHeight * idx
+      y: rectY + oneHeight * idx,
+      textColor: isTitle ? 'black' : selected.textColor
     };
   });
   return (
     <>
-      {blocks.map(({ text, x, y, fill }, idx) => (
+      {blocks.map(({ text, x, y, fill, textColor }, idx) => (
         <>
           <rect
             key={idx}
@@ -63,6 +74,7 @@ const renderQuestion = (
             key={idx}
             x={x + 5}
             y={y + 15}
+            fill={textColor}
             // textAnchor="middle"
             width={PROCESS_BLOCK_SIZE.WIDTH}
             height={oneHeight}

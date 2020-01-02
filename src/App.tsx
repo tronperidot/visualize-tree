@@ -17,7 +17,7 @@ const App: React.FC = () => {
     <div className="App">
       <svg width={SVG_WINDOW.WIDTH} height={SVG_WINDOW.HEIGHT} version="1.1" xmlns="http://www.w3.org/2000/svg">
         {lines.map((line, key) => (
-          <Line from={line.fromPosition} to={line.toPosition } key={key} />
+          <Line from={line.fromPosition} to={line.toPosition } key={key} isSelected={(key % 2) > 0} />
         ))}
         {processes.map((value, idx) => {
           return (

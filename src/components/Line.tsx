@@ -3,10 +3,19 @@ import React from 'react';
 type Props = {
   from: { x: number; y: number };
   to: { x: number; y: number };
+  isSelected: boolean;
 };
 
-const Line: React.FC<Props> = ({ from, to }) => {
-  const strokeWidth = 3;
+const Line: React.FC<Props> = ({ from, to, isSelected }) => {
+  const selected = isSelected
+    ? {
+        stroke: 'black',
+        marker: 'url(#arrow)'
+      }
+    : {
+        stroke: 'royalblue',
+        marker: 'url(#arrow-selected)'
+      };
   const margin = randRange(10, 90);
   const points = [
     `${from.x},${from.y}`,
@@ -15,16 +24,13 @@ const Line: React.FC<Props> = ({ from, to }) => {
     `${to.x - 5},${to.y}`
   ].join(' ');
   return (
-    <g stroke="black">
+    <g stroke={selected.stroke}>
       <polyline
         fill="none"
         points={points}
-        markerEnd="url(#arrow)"
-        strokeWidth={strokeWidth}
+        markerEnd={selected.marker}
+        strokeWidth={3}
       />
-      <text x={calcMiddle(from.x, to.x) + 30} y={calcMiddle(from.y, to.y)}>
-        {/* {strokeWidth} */}
-      </text>
     </g>
   );
 };
