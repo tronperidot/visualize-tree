@@ -18,19 +18,77 @@ const ProcessBlock: React.FC<Props> = ({ query }) => {
   const { x, y } = query.position;
   const rectX = x - PROCESS_BLOCK_SIZE.WIDTH / 2;
   const rectY = y - PROCESS_BLOCK_SIZE.HEIGHT / 2;
-  const fill = query.type === 'question' ? 'mediumseagreen' : 'gainsboro';
   const multiLineText = [query.getLabel()];
   if (query.isQuestion) {
     query.getAnswerList.forEach(v => multiLineText.push(v.label));
   }
   return (
     <g>
+      {query.isQuestion
+        ? renderQuestion(rectX, rectY, multiLineText)
+        : renderAnswer(rectX, rectY, multiLineText)}
+    </g>
+  );
+};
+
+const renderQuestion = (
+  rectX: number,
+  rectY: number,
+  multiLineText: string[]
+) => {
+  const oneHeight = PROCESS_BLOCK_SIZE.HEIGHT / 3;
+  const blocks = multiLineText.map((text, idx) => {
+    const isTitle = idx === 0;
+    return {
+      text: isTitle ? text : `　　${text}`,
+      fill: isTitle ? 'ivory' : 'whitesmoke',
+      x: rectX,
+      y: rectY + oneHeight * idx
+    };
+  });
+  return (
+    <>
+      {blocks.map(({ text, x, y, fill }, idx) => (
+        <>
+          <rect
+            key={idx}
+            x={x}
+            y={y}
+            stroke="lightgray"
+            width={PROCESS_BLOCK_SIZE.WIDTH}
+            height={oneHeight}
+            style={{ fill }}
+          />
+          <text
+            key={idx}
+            x={x + 5}
+            y={y + 15}
+            // textAnchor="middle"
+            width={PROCESS_BLOCK_SIZE.WIDTH}
+            height={oneHeight}
+            fontSize="10"
+          >
+            {text}
+          </text>
+        </>
+      ))}
+    </>
+  );
+};
+
+const renderAnswer = (
+  rectX: number,
+  rectY: number,
+  multiLineText: string[]
+) => {
+  return (
+    <>
       <rect
         x={rectX}
         y={rectY}
         width={PROCESS_BLOCK_SIZE.WIDTH}
         height={PROCESS_BLOCK_SIZE.HEIGHT}
-        style={{ fill }}
+        style={{ fill: 'gainsboro' }}
       />
       {multiLineText.map((text, idx) => (
         <text
@@ -44,16 +102,16 @@ const ProcessBlock: React.FC<Props> = ({ query }) => {
           {text}
         </text>
       ))}
-    </g>
+    </>
   );
 };
 
 export default ProcessBlock;
 
-const split = (text: string, size: number) => {
-  const ary = [];
-  for (let i = 0; i < text.length; i += size) {
-    ary.push(text.slice(i, i + size));
-  }
-  return ary;
-};
+// const split = (text: string, size: number) => {
+//   const ary = [];
+//   for (let i = 0; i < text.length; i += size) {
+//     ary.push(text.slice(i, i + size));
+//   }
+//   return ary;
+// };

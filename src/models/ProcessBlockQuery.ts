@@ -53,14 +53,15 @@ export class ProcessBlockQuery {
   }
 
   getLabel(): string {
-    return (this.isQuestion) ? this.question!.label : this.cinema!.title;
+    return (this.isQuestion) ? this.question!.label : this.cinema!.title.replace("<br />", "");
   }
 
   // TODO: これはアンサーごとにyがずれる
   getFromPosition(idx: number): SVGPosition {
+    const slide = (PROCESS_BLOCK_SIZE.HEIGHT / 3)
     return {
       x: this.position.x + (PROCESS_BLOCK_SIZE.WIDTH / 2),
-      y: this.position.y + (idx === 0 ? - 8 : 6)
+      y: this.position.y + (idx === 0 ? 0 : slide)
     };
   }
 
