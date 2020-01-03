@@ -25,7 +25,7 @@ const ProcessBlock: React.FC<Props> = ({ query }) => {
     );
     return <g>{renderQuestion(rectX, rectY, multiLineText)}</g>;
   } else {
-    const text = `　${query.getLabel()} (${query.resultCinemaRate}%)`;
+    const text = ` ${query.getLabel()} (${query.resultCinemaRate}%)`;
     return <g>{renderAnswer(rectX, rectY, text)}</g>;
   }
 };

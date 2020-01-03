@@ -15,3 +15,9 @@ export const caclYPos = (contentLength: number, pos: number): number => {
   const slideToCenter = (PROCESS_BLOCK_SIZE.HEIGHT / 2);
   return firstPosition + (oneSize * pos) + slideToCenter;
 }
+
+export const rate = (max: number, x?: number) => {
+  const base = 10;
+  const value = (x || 0) * 100;
+  return Math.round((value / max) * base) / base;
+}

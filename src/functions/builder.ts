@@ -2,7 +2,7 @@ import { Question, Answer } from "../mockData/Questions";
 import { Cinema } from "../mockData/Cinemas";
 import { ProcessType } from ".";
 import { ProcessBlockQuery } from "../models/ProcessBlockQuery";
-import { calcXPos, caclYPos } from "./calculation";
+import { calcXPos, caclYPos, rate } from "./calculation";
 import { SelecteItem } from "../mockData/SelectedItemList";
 
 type Next = { type: ProcessType, src: Question | Cinema};
@@ -97,10 +97,10 @@ export const setSelectCount = (processes: ProcessBlockQuery[], selectedItemList:
   const max = selectedItemList.reduce((val, current) => val + current.count, 0);
   processes.forEach((item) => {
     item.getAnswerList.forEach((ans) => {
-      ans.rate = Math.round(((ans.count || 0) * 100) / max);
+      ans.rate = rate(max, ans.count);
     });
     if (item.isCinema) {
-      item.resultCinemaRate = Math.round(((item.resultCinemaCount || 0) * 100) / max);
+      item.resultCinemaRate = rate(max, item.resultCinemaCount);
     }
   });
 }
