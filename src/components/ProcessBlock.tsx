@@ -18,17 +18,16 @@ const ProcessBlock: React.FC<Props> = ({ query }) => {
   const { x, y } = query.position;
   const rectX = x - PROCESS_BLOCK_SIZE.WIDTH / 2;
   const rectY = y - PROCESS_BLOCK_SIZE.HEIGHT / 2;
-  const multiLineText = [query.getLabel()];
   if (query.isQuestion) {
-    query.getAnswerList.forEach(v => multiLineText.push(v.label));
+    const multiLineText = [query.getLabel()];
+    query.getAnswerList.forEach(v =>
+      multiLineText.push(`${v.label} (${v.rate}%)`)
+    );
+    return <g>{renderQuestion(rectX, rectY, multiLineText)}</g>;
+  } else {
+    const text = `　${query.getLabel()} (${query.resultCinemaRate}%)`;
+    return <g>{renderAnswer(rectX, rectY, text)}</g>;
   }
-  return (
-    <g>
-      {query.isQuestion
-        ? renderQuestion(rectX, rectY, multiLineText)
-        : renderAnswer(rectX, rectY, multiLineText)}
-    </g>
-  );
 };
 
 const renderQuestion = (
@@ -40,7 +39,7 @@ const renderQuestion = (
   const blocks = multiLineText.map((text, idx) => {
     const isTitle = idx === 0;
     const selected =
-      idx % 2 > 0
+      idx % 2 > 0 && false
         ? {
             fill: 'royalblue',
             textColor: 'snow'
@@ -88,11 +87,7 @@ const renderQuestion = (
   );
 };
 
-const renderAnswer = (
-  rectX: number,
-  rectY: number,
-  multiLineText: string[]
-) => {
+const renderAnswer = (rectX: number, rectY: number, text: string) => {
   return (
     <>
       <rect
@@ -102,18 +97,15 @@ const renderAnswer = (
         height={PROCESS_BLOCK_SIZE.HEIGHT}
         style={{ fill: 'gainsboro' }}
       />
-      {multiLineText.map((text, idx) => (
-        <text
-          key={idx}
-          x={rectX + 5}
-          y={rectY + 15 + 16 * idx}
-          width={10}
-          height={PROCESS_BLOCK_SIZE.HEIGHT}
-          fontSize="10"
-        >
-          {text}
-        </text>
-      ))}
+      <text
+        x={rectX + 5}
+        y={rectY + 15 + 16}
+        width={10}
+        height={PROCESS_BLOCK_SIZE.HEIGHT}
+        fontSize="10"
+      >
+        {text}
+      </text>
     </>
   );
 };

@@ -29,13 +29,13 @@ const Line: React.FC<Props> = ({ from, to, isSelected }) => {
         fill="none"
         points={points}
         markerEnd={selected.marker}
-        strokeWidth={3}
+        strokeWidth={2}
       />
     </g>
   );
 };
 
-const calcMiddle = (from: number, to: number) => (from + to) / 2;
+// const calcMiddle = (from: number, to: number) => (from + to) / 2;
 const randRange = (min: number, max: number) =>
   Math.floor(Math.random() * (max - min + 1) + min);
 

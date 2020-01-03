@@ -2,6 +2,9 @@ export interface Answer {
   label: string;
   nextQuestionId: number | null;
   resultCinemaId: number | null;
+  // 結果の数字を入れるために使っている。本当は別のインターフェースにするべき
+  count?: number;
+  rate?: number;
 }
 
 export interface Question {

@@ -8,6 +8,9 @@ export class ProcessBlockQuery {
   position: SVGPosition;
   question?: Question;
   cinema?: Cinema;
+  deepCnt: number;
+  resultCinemaCount?: number;
+  resultCinemaRate?: number;
 
   get id() {
     return this.getQuestionId || this.getCinemaId;
@@ -33,9 +36,10 @@ export class ProcessBlockQuery {
     return this.isCinema ? this.cinema!.id : undefined;
   }
 
-  constructor(type: ProcessType, src: Question | Cinema, position: SVGPosition) {
+  constructor(type: ProcessType, src: Question | Cinema, position: SVGPosition, deepCnt: number) {
     this.type = type;
     this.position = position;
+    this.deepCnt = deepCnt;
     if (type === 'question') {
       this.question = src as Question;
     } else if (type === 'cinema') {

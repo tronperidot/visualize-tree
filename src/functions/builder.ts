@@ -3,6 +3,7 @@ import { Cinema } from "../mockData/Cinemas";
 import { ProcessType } from ".";
 import { ProcessBlockQuery } from "../models/ProcessBlockQuery";
 import { calcXPos, caclYPos } from "./calculation";
+import { SelecteItem } from "../mockData/SelectedItemList";
 
 type Next = { type: ProcessType, src: Question | Cinema};
 
@@ -48,7 +49,7 @@ export const buildArrayToQuery = (source: Next[][]): ProcessBlockQuery[] => {
     const x = calcXPos(deepCnt);
     deepItems.forEach((next, idx) => {
       const y = caclYPos(deepItems.length, idx);
-      result.push(new ProcessBlockQuery(next.type, next.src, { x, y }))
+      result.push(new ProcessBlockQuery(next.type, next.src, { x, y }, deepCnt));
     });
   });
   return result;
@@ -63,4 +64,43 @@ export const findNext = (answer: Answer, questions: Question[], cinemas: Cinema[
     type: 'cinema',
     src: cinemas.find((cinema) => cinema.id === answer.resultCinemaId)!!
   };
+}
+
+export const setSelectCount = (processes: ProcessBlockQuery[], selectedItemList: SelecteItem[]): void => {
+  // count を代入
+  selectedItemList.forEach(({ passedQuestion, count, resultId }) => {
+    const idList = passedQuestion.split(",");
+    for (let idx = 0; idx < idList.length - 1; idx++) {
+      const currentId = Number(idList[idx]);
+      const nextId = Number(idList[idx + 1]);
+      const question = processes.find((q) => q.isQuestion && q.id === currentId);
+      const ans = question?.getAnswerList.find((ans) => ans.nextQuestionId === nextId);
+      if (ans) {
+        ans.count = (ans?.count !== undefined) ? ans.count + count : count;
+      }
+    }
+    const lastQquestionId = Number(idList[idList.length -1]);
+    const ans = processes
+      .find((q) => q.isQuestion && q.id === lastQquestionId)
+      ?.getAnswerList.find((ans) => ans.resultCinemaId === resultId);
+    if (ans) {
+      ans.count = (ans?.count !== undefined) ? ans.count + count : count;
+    }
+    // 映画にも代入
+    const cinema = processes.find((c) => c.isCinema && c.id === resultId);
+    if (cinema) {
+      cinema.resultCinemaCount = (cinema.resultCinemaCount !== undefined) ? cinema.resultCinemaCount + count : count;
+    }
+  });
+
+  // rateを代入
+  const max = selectedItemList.reduce((val, current) => val + current.count, 0);
+  processes.forEach((item) => {
+    item.getAnswerList.forEach((ans) => {
+      ans.rate = Math.round(((ans.count || 0) * 100) / max);
+    });
+    if (item.isCinema) {
+      item.resultCinemaRate = Math.round(((item.resultCinemaCount || 0) * 100) / max);
+    }
+  });
 }
